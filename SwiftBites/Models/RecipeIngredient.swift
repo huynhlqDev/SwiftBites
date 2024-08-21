@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @Model
-struct RecipeIngredient: Identifiable, Hashable {
+class RecipeIngredient: Identifiable {
     let id: UUID
     var ingredient: Ingredient
     var quantity: String
@@ -18,13 +18,5 @@ struct RecipeIngredient: Identifiable, Hashable {
         self.id = id
         self.ingredient = ingredient
         self.quantity = quantity
-    }
-
-    static func ==(lhs: RecipeIngredient, rhs: RecipeIngredient) -> Bool {
-        lhs.id == rhs.id
-    }
-
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
     }
 }

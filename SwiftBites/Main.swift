@@ -1,28 +1,32 @@
 import SwiftUI
+import SwiftData
 
 /// The main view that appears when the app is launched.
 struct ContentView: View {
-  @Environment(\.storage) private var storage
+    @Query private var recipes: [Recipe]
+    @Query private var categories: [Category]
+    @Query private var ingredients: [Ingredient]
 
   var body: some View {
     TabView {
-      RecipesView()
+      RecipesView(recipes: recipes)
         .tabItem {
           Label("Recipes", systemImage: "frying.pan")
         }
 
-      CategoriesView()
+      CategoriesView(categories: categories)
         .tabItem {
           Label("Categories", systemImage: "tag")
         }
 
-      IngredientsView()
+      IngredientsView(ingredients: ingredients)
         .tabItem {
           Label("Ingredients", systemImage: "carrot")
         }
     }
-    .onAppear {
-      storage.load()
-    }
   }
+}
+
+#Preview {
+    ContentView()
 }
