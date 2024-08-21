@@ -4,7 +4,6 @@ import SwiftData
 /// The main view that appears when the app is launched.
 struct ContentView: View {
     @Query private var recipes: [Recipe]
-    @Query private var ingredients: [Ingredient]
 
     var body: some View {
         TabView {
@@ -18,7 +17,7 @@ struct ContentView: View {
                     Label("Categories", systemImage: "tag")
                 }
 
-            IngredientsView(ingredients: ingredients)
+            IngredientsView()
                 .tabItem {
                     Label("Ingredients", systemImage: "carrot")
                 }

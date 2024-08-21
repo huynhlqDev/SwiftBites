@@ -1,15 +1,17 @@
 import SwiftUI
+import SwiftData
 
 struct IngredientsView: View {
     typealias Selection = (Ingredient) -> Void
-    @Environment(\.dismiss) private var dismiss
-    @State private var query = ""
-    @State var ingredients: [Ingredient]
     let selection: Selection?
 
-    init(ingredients:  [Ingredient], selection: Selection? = nil) {
+    @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var context
+    @Query var ingredients: [Ingredient]
+    @State private var query = ""
+
+    init( selection: Selection? = nil) {
         self.selection = selection
-        self._ingredients = State(initialValue: ingredients)
     }
   // MARK: - Body
 
@@ -118,6 +120,10 @@ struct IngredientsView: View {
   // MARK: - Data
 
   private func delete(ingredient: Ingredient) {
-//  TODO:  deleteIngredient(id: ingredient.id)
+      do {
+          context.delete(ingredient)
+          try context.save()
+      } catch { }
   }
+
 }

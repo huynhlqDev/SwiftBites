@@ -91,9 +91,9 @@ struct CategoryForm: View {
               }
           }
           try context.save()
+          dismiss()
       } catch {
           self.error = error
       }
-      dismiss()
   }
 }
