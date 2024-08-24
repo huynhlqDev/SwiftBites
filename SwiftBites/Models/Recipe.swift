@@ -10,26 +10,28 @@ import SwiftData
 
 @Model
 class Recipe: Identifiable {
-    let id: UUID
+    var id: UUID
     var name: String
     var summary: String
-    var category: Category?
     var serving: Int
     var time: Int
-    var ingredients: [RecipeIngredient]
     var instructions: String
     var imageData: Data?
+    @Relationship(deleteRule: .nullify)
+    var category: Category?
+    @Relationship(deleteRule: .cascade)
+    var ingredients: [RecipeIngredient]
 
     init(
         id: UUID = UUID(),
         name: String = "",
         summary: String = "",
-        category: Category? = nil,
         serving: Int = 1,
         time: Int = 5,
-        ingredients: [RecipeIngredient] = [],
         instructions: String = "",
-        imageData: Data? = nil
+        imageData: Data? = nil,
+        category: Category? = nil,
+        ingredients: [RecipeIngredient] = []
     ) {
         self.id = id
         self.name = name

@@ -2,7 +2,7 @@ import SwiftUI
 import SwiftData
 
 struct IngredientsView: View {
-    typealias Selection = (Ingredient) -> Void
+    typealias Selection = (UUID) -> Void
     let selection: Selection?
 
     @Environment(\.dismiss) private var dismiss
@@ -98,7 +98,7 @@ struct IngredientsView: View {
     if let selection {
       Button(
         action: {
-          selection(ingredient)
+            selection(ingredient.id)
           dismiss()
         },
         label: {

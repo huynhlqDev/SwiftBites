@@ -49,9 +49,10 @@ struct RecipeForm: View {
   @State private var isIngredientsPickerPresented =  false
   @State private var error: Error?
   @Environment(\.dismiss) private var dismiss
-
-
-    @Query private var categories: [Category]
+  @Environment(\.modelContext) private var context
+  @Query private var allIngredients: [Ingredient]
+  @Query private var allRecipes: [Recipe]
+  @Query private var categories: [Category]
 
   // MARK: - Body
 
@@ -89,9 +90,18 @@ struct RecipeForm: View {
   // MARK: - Views
 
   private func ingredientPicker() -> some View {
-    IngredientsView(ingredients: []) { selectedIngredient in
-      let recipeIngredient = RecipeIngredient(ingredient: selectedIngredient, quantity: "")
-      ingredients.append(recipeIngredient)
+    IngredientsView() { selectedIngredientId in
+        do {
+            if let index = allIngredients.firstIndex(where: { $0.id == selectedIngredientId}) {
+
+                let recipeIngredient = RecipeIngredient(ingredient: allIngredients[index])
+                context.insert(recipeIngredient)
+                try context.save()
+                ingredients.append(recipeIngredient)
+            }
+        } catch {
+            fatalError()
+        }
     }
   }
 
@@ -257,11 +267,16 @@ struct RecipeForm: View {
   // MARK: - Data
 
   func delete(recipe: Recipe) {
-    guard case .edit(let recipe) = mode else {
-      fatalError("Delete unavailable in add mode")
-    }
-//   TODO: storage.deleteRecipe(id: recipe.id)
-    dismiss()
+      guard case .edit(let recipe) = mode else {
+          fatalError("Delete unavailable in add mode")
+      }
+      do {
+          context.delete(recipe)
+          try context.save()
+          dismiss()
+      } catch(let error) {
+          fatalError(error.localizedDescription)
+      }
   }
 
   func deleteIngredients(offsets: IndexSet) {
@@ -275,34 +290,31 @@ struct RecipeForm: View {
 
     do {
       switch mode {
-      case .add: 
-          // TODO: add
-          break
-//        try storage.addRecipe(
-//          name: name,
-//          summary: summary,
-//          category: category,
-//          serving: serving,
-//          time: time,
-//          ingredients: ingredients,
-//          instructions: instructions,
-//          imageData: imageData
-//        )
+      case .add:
+          let newRecipe = Recipe(
+            name: name,
+            summary: summary,
+            serving: serving,
+            time: time,
+            instructions: instructions,
+            imageData: imageData,
+            category: category
+          )
+          context.insert(newRecipe)
+          newRecipe.ingredients = ingredients
       case .edit(let recipe):
-          // TODO: edit
-          break
-//        try storage.updateRecipe(
-//          id: recipe.id,
-//          name: name,
-//          summary: summary,
-//          category: category,
-//          serving: serving,
-//          time: time,
-//          ingredients: ingredients,
-//          instructions: instructions,
-//          imageData: imageData
-//        )
+          if let updateRecipe = allRecipes.first(where: { $0.id == recipe.id}) {
+              updateRecipe.name = name
+              updateRecipe.summary = summary
+              updateRecipe.serving = serving
+              updateRecipe.time = time
+              updateRecipe.instructions = instructions
+              updateRecipe.imageData = imageData
+              updateRecipe.category = category
+              updateRecipe.ingredients = ingredients
+          }
       }
+        try context.save()
       dismiss()
     } catch {
       self.error = error

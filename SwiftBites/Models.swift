@@ -1,9 +1,9 @@
-//import Foundation
-//
-///**
-// * This file contains temporary models that should be replaced when adding SwiftData.
-// * It is essential to remove this file before the final project submission.
-// */
+import Foundation
+
+/**
+ * This file contains temporary models that should be replaced when adding SwiftData.
+ * It is essential to remove this file before the final project submission.
+ */
 //
 //struct MockCategory: Identifiable, Hashable, Codable {
 //  let id: UUID

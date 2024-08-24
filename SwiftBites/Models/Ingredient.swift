@@ -10,7 +10,7 @@ import SwiftData
 
 @Model
 class Ingredient: Identifiable {
-    let id: UUID
+    var id: UUID
     var name: String
 
     init(id: UUID = UUID(), name: String = "") {

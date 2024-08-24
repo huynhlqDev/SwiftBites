@@ -10,7 +10,8 @@ import SwiftData
 
 @Model
 class RecipeIngredient: Identifiable {
-    let id: UUID
+    var id: UUID
+    @Relationship(deleteRule: .cascade)
     var ingredient: Ingredient
     var quantity: String
 
