@@ -2,12 +2,13 @@ import SwiftUI
 import SwiftData
 
 struct IngredientsView: View {
-    typealias Selection = (UUID) -> Void
+    typealias Selection = (Ingredient) -> Void
     let selection: Selection?
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var context
     @Query var ingredients: [Ingredient]
+    @Query var recipeIngredients: [RecipeIngredient]
     @State private var query = ""
 
     init( selection: Selection? = nil) {
@@ -98,7 +99,7 @@ struct IngredientsView: View {
     if let selection {
       Button(
         action: {
-            selection(ingredient.id)
+            selection(ingredient)
           dismiss()
         },
         label: {
@@ -120,10 +121,11 @@ struct IngredientsView: View {
   // MARK: - Data
 
   private func delete(ingredient: Ingredient) {
-      do {
-          context.delete(ingredient)
-          try context.save()
-      } catch { }
+      for recipeIngredient in ingredient.recipeIngredients {
+          context.delete(recipeIngredient)
+      }
+      context.delete(ingredient)
+      try? context.save()
   }
 
 }

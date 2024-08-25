@@ -70,6 +70,9 @@ struct IngredientForm: View {
 
   private func delete(ingredient: Ingredient) {
       do {
+          for recipeIngredient in ingredient.recipeIngredients {
+              context.delete(recipeIngredient)
+          }
           context.delete(ingredient)
           try context.save()
       } catch {
@@ -82,11 +85,10 @@ struct IngredientForm: View {
     do {
       switch mode {
       case .add: 
-          context.insert(Ingredient(name: name))
+          let ingredient = Ingredient(name: name)
+          context.insert(ingredient)
       case .edit(let ingredient):
-          if let updateIngredient = ingredients.first(where: { $0.id == ingredient.id }) {
-              updateIngredient.name = name
-          }
+          ingredient.name = name
       }
         try context.save()
       dismiss()
