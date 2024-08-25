@@ -19,7 +19,7 @@ class Recipe: Identifiable, Equatable {
     var imageData: Data?
     var category: Category?
 
-    @Relationship(deleteRule: .cascade, inverse: \RecipeIngredient.recipe)
+    @Relationship(deleteRule: .cascade)
     var ingredients = [RecipeIngredient]()
 
     init(

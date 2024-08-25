@@ -13,10 +13,10 @@ final class RecipeIngredient: Identifiable, Equatable {
     let id: UUID
     var quantity: String
 
-    @Relationship(deleteRule: .cascade)
+    @Relationship(deleteRule: .nullify, inverse: \Ingredient.recipeIngredients)
     var ingredient: Ingredient?
 
-    @Relationship(deleteRule: .cascade)
+    @Relationship(deleteRule: .nullify, inverse: \Recipe.ingredients)
     var recipe: Recipe?
 
     init(id: UUID = UUID(), ingredient: Ingredient, quantity: String = "") {

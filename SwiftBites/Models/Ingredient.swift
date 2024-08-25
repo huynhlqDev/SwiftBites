@@ -13,7 +13,7 @@ final class Ingredient: Identifiable, Equatable {
     let id: UUID
     @Attribute(.unique) var name: String
 
-    @Relationship(deleteRule: .cascade, inverse: \RecipeIngredient.ingredient)
+    @Relationship(deleteRule: .cascade)
     var recipeIngredients = [RecipeIngredient]()
 
     init(name: String) {

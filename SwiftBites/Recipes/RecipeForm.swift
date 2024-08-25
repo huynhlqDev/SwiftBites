@@ -90,9 +90,9 @@ struct RecipeForm: View {
   // MARK: - Views
 
   private func ingredientPicker() -> some View {
-    IngredientsView() { selectedIngredientId in
+    IngredientsView() { selectedIngredient in
         do {
-            if let index = allIngredients.firstIndex(where: { $0.id == selectedIngredientId}) {
+            if let index = allIngredients.firstIndex(where: { $0.id == selectedIngredient.id}) {
 
                 let recipeIngredient = RecipeIngredient(ingredient: allIngredients[index])
                 context.insert(recipeIngredient)
@@ -206,7 +206,7 @@ struct RecipeForm: View {
       } else {
         ForEach(ingredients) { ingredient in
           HStack(alignment: .center) {
-            Text(ingredient.ingredient.name)
+              Text(ingredient.ingredient?.name ?? "")
               .bold()
               .layoutPriority(2)
             Spacer()
@@ -271,6 +271,9 @@ struct RecipeForm: View {
           fatalError("Delete unavailable in add mode")
       }
       do {
+          for recipeIngredient in recipe.ingredients {
+              context.delete(recipeIngredient)
+          }
           context.delete(recipe)
           try context.save()
           dismiss()
