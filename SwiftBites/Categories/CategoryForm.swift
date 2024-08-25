@@ -72,6 +72,9 @@ struct CategoryForm: View {
 
   private func delete(category: Category) {
       do {
+          for recipe in category.recipes {
+              recipe.category = nil
+          }
           context.delete(category)
           try context.save()
       } catch {

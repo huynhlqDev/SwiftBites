@@ -304,6 +304,7 @@ struct RecipeForm: View {
             category: category
           )
           context.insert(newRecipe)
+          category?.recipes.append(newRecipe)
           newRecipe.ingredients = ingredients
       case .edit(let recipe):
           if let updateRecipe = allRecipes.first(where: { $0.id == recipe.id}) {
@@ -315,6 +316,7 @@ struct RecipeForm: View {
               updateRecipe.imageData = imageData
               updateRecipe.category = category
               updateRecipe.ingredients = ingredients
+              category?.recipes.append(updateRecipe)
           }
       }
         try context.save()
