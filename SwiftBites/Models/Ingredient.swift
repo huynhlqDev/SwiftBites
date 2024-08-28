@@ -11,7 +11,8 @@ import SwiftData
 @Model
 final class Ingredient: Identifiable, Equatable {
     let id: UUID
-    @Attribute(.unique) var name: String
+    @Attribute(.unique) 
+    var name: String
 
     @Relationship(deleteRule: .cascade)
     var recipeIngredients = [RecipeIngredient]()

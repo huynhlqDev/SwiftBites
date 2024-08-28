@@ -12,8 +12,9 @@ import SwiftData
 class Category: Identifiable, Equatable {
     var id: UUID
 
+    @Attribute(.unique)
     var name: String
-    @Relationship(deleteRule: .cascade, inverse: \Recipe.category)
+    @Relationship(deleteRule: .nullify, inverse: \Recipe.category)
     var recipes = [Recipe]()
 
     init(name: String = "") {

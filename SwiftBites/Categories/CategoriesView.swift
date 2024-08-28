@@ -31,53 +31,8 @@ struct CategoriesView: View {
 
   @ViewBuilder
   private var content: some View {
-    if categories.isEmpty {
-      empty
-    } else {
-      list(for: categories.filter {
-        if query.isEmpty {
-          return true
-        } else {
-          return $0.name.localizedStandardContains(query)
-        }
-      })
-    }
+      CategoryList(query: query)
+          .searchable(text: $query)
   }
 
-  private var empty: some View {
-    ContentUnavailableView(
-      label: {
-        Label("No Categories", systemImage: "list.clipboard")
-      },
-      description: {
-        Text("Categories you add will appear here.")
-      },
-      actions: {
-        NavigationLink("Add Category", value: CategoryForm.Mode.add)
-          .buttonBorderShape(.roundedRectangle)
-          .buttonStyle(.borderedProminent)
-      }
-    )
-  }
-
-  private var noResults: some View {
-    ContentUnavailableView(
-      label: {
-        Text("Couldn't find \"\(query)\"")
-      }
-    )
-  }
-
-  private func list(for categories: [Category]) -> some View {
-    ScrollView(.vertical) {
-      if categories.isEmpty {
-        noResults
-      } else {
-        LazyVStack(spacing: 10) {
-          ForEach(categories, content: CategorySection.init)
-        }
-      }
-    }
-    .searchable(text: $query)
-  }
 }

@@ -11,12 +11,14 @@ import SwiftData
 @Model
 class Recipe: Identifiable, Equatable {
     var id: UUID
+    @Attribute(.unique)
     var name: String
     var summary: String
     var serving: Int
     var time: Int
     var instructions: String
     var imageData: Data?
+    @Relationship(deleteRule: .nullify)
     var category: Category?
 
     @Relationship(deleteRule: .cascade)
